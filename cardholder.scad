@@ -1,7 +1,7 @@
 // badge holder for multiple cards
 // Copyright (C) 2021  Robert Schiele <rschiele@gmail.com>
 //
-// This work is licensed under the Creative Commons Namensnennung 4.0 International
+// This work is licensed under the Creative Commons Attribution 4.0 International
 // License. To view a copy of this license, visit 
 // http://creativecommons.org/licenses/by/4.0/.
 
