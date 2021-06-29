@@ -10,6 +10,8 @@
 all: \
 	cardholder_part1.stl \
 	cardholder_part2.stl \
+	keychain_cart_coin_part1.stl \
+	keychain_cart_coin_part2.stl \
 
 .PHONY: clean
 
