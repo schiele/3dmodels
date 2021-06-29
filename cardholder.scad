@@ -5,6 +5,9 @@
 // International License. To view a copy of this license, visit 
 // http://creativecommons.org/licenses/by/4.0/.
 
+part = 1;
+line1 = "Robert";
+line2 = "Schiele";
 card_length = 85.60;
 card_width = 53.98;
 card_thickness = 0.76;
@@ -178,19 +181,15 @@ module engravetext(loc, line) {
                      halign="center", valign="center");
 };
 
-module engraving(line1, line2) {
+module engraving() {
     engravetext(18, line1);
     engravetext(-18, line2);
 }
 
-module engraved(part, line1, line2) {
-    if (part == 1) {
-        difference() {
-            base();
-            engraving(line1, line2);
-        };
-    } else if (part == 2)
-        engraving(line1, line2);
-};
-
-engraved(1, "Robert", "Schiele");
+if (part == 1) {
+    difference() {
+        base();
+        engraving();
+    };
+} else if (part == 2)
+    engraving();
