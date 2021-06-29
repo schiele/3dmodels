@@ -4,10 +4,13 @@
 // This work is licensed under the Creative Commons Attribution 4.0
 // International License. To view a copy of this license, visit 
 // http://creativecommons.org/licenses/by/4.0/.
+//
+// Code was written from scratch but some ideas got inspired from
+// https://www.prusaprinters.org/prints/42136
 
 part = 1;
-line1 = "Robert";
-line2 = "Schiele";
+line1 = "Robert Schiele";
+line2 = "+49-173-1234567";
 card_length = 85.60;
 card_width = 53.98;
 card_thickness = 0.76;
@@ -178,7 +181,7 @@ module engravetext(loc, line) {
         rotate([180,0,90])
             linear_extrude(height = thickness/2)
                 text(line, font = "Liberation Sans:style=Bold",
-                     halign="center", valign="center");
+                     size=6, halign="center", valign="center");
 };
 
 module engraving() {
