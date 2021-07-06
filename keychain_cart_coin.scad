@@ -10,8 +10,10 @@
 // https://www.prusaprinters.org/prints/19338
 
 part = 1;
-line1 = "Robert Schiele";
-line2 = "+49-173-1234567";
+line1 = "Robert";
+line2 = "Schiele";
+line3 = "+49 173";
+line4 = "1234567";
 handle_length = 35.00;
 handle_width  = 18.00;
 hole_distance =  3.00;
@@ -41,14 +43,14 @@ module base() {
 module engravetext(line) {
             linear_extrude(height = obj_height/2)
                 text(line, font = "Liberation Sans:style=Bold",
-                     size=2.5, halign="center", valign="center");
+                     size=5, halign="center", valign="center");
 };
 
 module engraving() {
     translate([-5, -4, obj_height/2]) rotate([180,0,0]) engravetext(line1);
     translate([-5,  4, obj_height/2]) rotate([180,0,0]) engravetext(line2);
-    translate([-5,  4, obj_height/2]) rotate([0,0,0]) engravetext(line1);
-    translate([-5, -4, obj_height/2]) rotate([0,0,0]) engravetext(line2);
+    translate([-5,  4, obj_height/2]) rotate([0,0,0]) engravetext(line3);
+    translate([-5, -4, obj_height/2]) rotate([0,0,0]) engravetext(line4);
 }
 
 if (part == 1) {
