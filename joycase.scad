@@ -13,7 +13,11 @@ eps = 0.01;
 inf = 100;
 connx = 30.81;
 conny = 12.55;
-ch=1;
+ch = 1;
+fndep = 0.8;
+numsize = 6;
+fontsize = 4;
+uselogos = 0;
 
 module screwcut(l1, l2=0) {
     translate([0,0,-eps]) {
@@ -57,14 +61,14 @@ module side() {
                 translate([sz/2,sz/2,lh+uh-thick/2])
                 hexgrid([sz-2*ch,sz-2*ch,thick],center=true, hexsize=5, width=1, chamfer=ch/4);
                 translate([thick/2,sz/2,lh/2+uh/2])
-                rotate([0,90,0])
-                hexgrid([lh+uh-2*ch,sz-2*ch,thick],center=true, hexsize=5, width=1, chamfer=ch/4);
+                rotate([90,0,90])
+                hexgrid([sz-2*ch,lh+uh-2*ch,thick],center=true, hexsize=5, width=1, chamfer=ch/4);
                 translate([sz/2,thick/2,lh/2+uh/2])
-                rotate([0,90,90])
-                hexgrid([lh+uh-2*ch,sz-2*ch,thick],center=true, hexsize=5, width=1, chamfer=ch/4);
+                rotate([90,0,0])
+                hexgrid([sz-2*ch,lh+uh-2*ch,thick],center=true, hexsize=5, width=1, chamfer=ch/4);
                 translate([sz/2,sz-thick/2,lh/2+uh/2])
-                rotate([0,90,90])
-                hexgrid([lh+uh-2*ch,sz-2*ch,thick],center=true, hexsize=5, width=1, chamfer=ch/4);
+                rotate([90,0,0])
+                hexgrid([sz-2*ch,lh+uh-2*ch,thick],center=true, hexsize=5, width=1, chamfer=ch/4);
                 chamferedcube([screwcase,screwcase,lh+uh],chamfer=ch);
                 translate([0,sz-screwcase,0])
                 chamferedcube([screwcase,screwcase,lh+uh],chamfer=ch);
@@ -72,8 +76,8 @@ module side() {
                 chamferedcube([screwcase,screwcase,lh+uh],chamfer=ch);
                 translate([sz/2-10/2-3*ch,sz-screwcase,0])
                 chamferedcube([10+6*ch,screwcase,lh+uh],chamfer=ch);
-                translate([0,ch,0])
-                cube([sz/2-boardx/2,boardz+screwcase,lh+uh]);
+                translate([0,ch,ch])
+                cube([sz/2-boardx/2,boardz+screwcase,lh+uh-2*ch]);
                 chamferedcube([sz,3*ch,3*ch],chamfer=ch);
                 translate([0,sz-24,0])
                 chamferedcube([sz,24,7],chamfer=ch);
@@ -108,13 +112,57 @@ module side() {
                 screwcut(lh+uh-2.5, 5.4);
             translate([screwcase/2,sz-screwcase/2,0])
                 screwcut(lh+uh-2.5, 5.4);
+            translate([sz/2-boardx/2,screwcase,thick])
+                cube([boardx,boardz,uh+lh-2*thick]);
         }
     }
 }
 
+module textcut(txt, sz) {
+    translate([0,0,-fndep])
+    linear_extrude(fndep+eps)
+    text(txt, font="Liberation Sans:style=Bold",
+         size=sz, halign="center", valign="center");
+}
+
+module logocut(file) {
+   translate([0,0,-fndep])
+   scale([0.1, 0.1, (fndep+eps)/100])
+   mirror([0,0,1])  
+   surface(file=file, center=true, invert=true);
+}
+
 module box() {
-    side();
-    translate([sz,0,0]) mirror([1,0,0]) side();
+    difference() {
+        union() {
+            side();
+            translate([sz,0,0]) mirror([1,0,0]) side();
+        }
+        if(uselogos)
+        translate([sz/2,screwcase+boardz/2,0])
+        rotate([0,180,0]) {
+            translate([-10,0,0])
+            logocut("Atari_logo_alt.png");
+            translate([10,0,0])
+            logocut("Commodore_C\=_logo.png");
+        }
+        translate([sz/2,sz-6,0])
+        rotate([0,180,0]) {
+            translate([-sz/4,0,0])
+            textcut("1", 6);
+            translate([sz/4,0,0])
+            textcut("2", 6);
+        }
+        translate([sz/2,screwcase+boardz,lh+uh]) {
+            translate([0,3,0])
+            textcut("NOSE INSIDE OFFS. 1", 4);
+            translate([0,-3,0])
+            textcut("RED = PIN 4", 4);
+        }
+        translate([sz/2,sz-screwcase/2,lh+uh])
+        textcut("ROBERT SCHIELE", 4);
+    }
+    
 }
 
 difference() {
@@ -139,8 +187,8 @@ rotate([90,0,0])
 cylinder(sz-2*screwcase,r=0.8, center=true);
 }
 
-translate([sz+10,0,lh+uh])
-mirror([0,0,1]) {
+translate([2*sz+10,0,lh+uh])
+rotate([0,180,0]) {
 intersection() {
     box();
     translate([0,0,lh])
