@@ -3,8 +3,8 @@ $fs=0.2;
 
 eps = 0.01;
 th = 2;
-sp = 1;
-h = 20;
+cutth = 2;
+h = 21;
 id = 25;
 od = 40;
 
@@ -44,23 +44,23 @@ module rings() {
 }
 
 module cleanbox() {
-    translate([0,0,-h/2-sp/2-th/2])
+    translate([0,0,-h/2-th/2])
     wall(th, id-2*th, th=od/2-id/2+2*th, start=false, end=false);
 
-    wall(h + sp, od, gapstart=2, gapend=-1);
-    wall(h + sp, id, inner=true,
+    wall(h, od, gapstart=2, gapend=-1);
+    wall(h, id, inner=true,
         start=false, end=false);
 
-    translate([0,0,h/2+sp/2+th/2])
+    translate([0,0,h/2+th/2])
     rotate([0,0,3/2*asin(th/2/(od/2+th/2))])
     rings();
     
-    translate([0,0,-h/2-sp/2-th/2])
+    translate([0,0,-h/2-th/2])
     linear_extrude(th, center=true)
     polygon([[od/2+th,0],[od/2+th,-od/2-th],
         [od/4+th/2,-od/4-th/2]]);
 
-    linear_extrude(h+sp+2*th, center=true)
+    linear_extrude(h+2*th, center=true)
     polygon([
         [(od/2+th/2)/sqrt(2),-(od/2+th/2)/sqrt(2)],
         [(od/2+th*3/2)/sqrt(2),-(od/2-th/2)/sqrt(2)],
@@ -72,18 +72,18 @@ module cleanbox() {
 
     rotate([0,0,-45-asin(th/2/(od/2+3/2*th))])
     translate([od/2+3/2*th,0,0])
-    wall(h+sp+2*th, th, start=false, end=false,
+    wall(h+2*th, th, start=false, end=false,
         anglestart=90, angleend=180);
 
     rotate([0,0,-45+asin(3/2*th/(od/2+3/2*th))])
     translate([od/2+3/2*th,0,0])
-    wall(h+sp+2*th, th, start=false, end=false,
+    wall(h+2*th, th, start=false, end=false,
         anglestart=180,
         angleend=270-asin(3/2*th/(od/2+3/2*th)));
 
     translate([od/2-1/2*th,
         -od/2-th+(sqrt(2)-3/2/(1+sqrt(2)))*th,0])
-    wall(h+sp+2*th, th*2, th=th/2,
+    wall(h+2*th, th*2, th=th/2,
         start=false, end=false,
         anglestart=0, angleend=45);
 }
@@ -91,10 +91,10 @@ module cleanbox() {
 module box() {
     difference() {
         cleanbox();
-        for(i=[-6*th:th:6*th])
-            translate([od/2+eps,-od/2-th,i])
+        for(i=[-(h/2+th+cutth):cutth:h/2+th+cutth])
+            translate([od/2-cutth/4+th+eps,-od/2-th,i])
             rotate([0,90,0])
-            cylinder(th, d=th, $fn=4);
+            cylinder(cutth/2, d=cutth, center=true, $fn=4);
     }
 }
 
@@ -124,7 +124,7 @@ module cover() {
     }
 }
 
-translate([0,0,h/2+sp/2+th])
+translate([0,0,h/2+th])
     box();
 translate([od+3*th,0,th/2])
     cover();
