@@ -1,23 +1,21 @@
+include <NopSCADlib/lib.scad>
 include <utils.scad>
 
-$fn = 100;
+$fa=1;
+$fs=0.2;
 
 sz = 65;
 lh = 33;
-uh = 10.4;
+pcbsp = 0.2;
 screwcase = 8;
 thick = 1.6;
-boardx = 60.2;
-boardz = 1.6;
-eps = 0.01;
-inf = 100;
-connx = 30.81;
-conny = 12.55;
 ch = 1;
 fndep = 0.8;
 numsize = 6;
 fontsize = 4;
 uselogos = 0;
+
+uh = pcb_width(PERF60x40) + pcbsp + 2*thick - lh;
 
 module screwcut(l1, l2=0) {
     translate([0,0,-eps]) {
@@ -30,24 +28,22 @@ module screwcut(l1, l2=0) {
 }
 
 module connectorcut() {
-    translate([0,0,7-0.9])
-    cube([connx,conny,0.9+3]);
-    translate([connx/2-24.99/2,conny/2,0])
-    screwcut(10);
-    translate([connx/2+24.99/2,conny/2,0])
-    screwcut(10);
+    type = DCONN9;
+    l = 10;
+
+    translate([0,0,d_front_height(type)-d_flange_thickness(type)])
+    linear_extrude(l + d_flange_thickness(type)
+                   - d_front_height(type))
+        rounded_square([d_flange_length(type),
+                        d_flange_width(type)], 2);
+
     translate([0,0,-eps])
-    linear_extrude(7+eps)
-    hull() {
-        translate([connx/2-18/2+2.5,conny/2+10.2/2-2.5])
-        circle(2.5);
-        translate([connx/2+18/2-2.5,conny/2+10.2/2-2.5])
-        circle(2.5);
-        translate([connx/2-18/2+2.5+tan(10)*(10.2-2.5*2),conny/2-10.2/2+2.5])
-        circle(2.5);
-        translate([connx/2+18/2-2.5-tan(10)*(10.2-2.5*2),conny/2-10.2/2+2.5])
-        circle(2.5);
-    }
+        linear_extrude(d_front_height(type)+eps)
+            d_plug_D(d_lengths(type)[0],
+                     d_widths(type)[0], 2.5);
+
+    d_connector_holes(type)
+    screwcut(l-2.5);
 }
 
 
@@ -72,27 +68,40 @@ module side() {
                 chamferedcube([screwcase,screwcase,lh+uh],chamfer=ch);
                 translate([0,sz-screwcase,0])
                 chamferedcube([screwcase,screwcase,lh+uh],chamfer=ch);
-                translate([0,screwcase+boardz,0])
+                translate([0,screwcase
+                        +pcb_thickness(PERF60x40)
+                        +pcbsp,0])
                 chamferedcube([screwcase,screwcase,lh+uh],chamfer=ch);
                 translate([sz/2-10/2-3*ch,sz-screwcase,0])
                 chamferedcube([10+6*ch,screwcase,lh+uh],chamfer=ch);
                 translate([0,ch,ch])
-                cube([sz/2-boardx/2,boardz+screwcase,lh+uh-2*ch]);
+                cube([sz/2-pcb_length(PERF60x40)/2
+                          -pcbsp/2,
+                      pcb_thickness(PERF60x40)+pcbsp
+                          +screwcase,lh+uh-2*ch]);
                 chamferedcube([sz,3*ch,3*ch],chamfer=ch);
                 translate([0,sz-24,0])
                 chamferedcube([sz,24,7],chamfer=ch);
-                translate([0,2*screwcase+boardz-3*ch,0])
+                translate([0,2*screwcase
+                    +pcb_thickness(PERF60x40)+pcbsp
+                    -3*ch,0])
                 chamferedcube([sz,3*ch,3*ch],chamfer=ch);
                 translate([ch,ch,0])
-                cube([sz-2*ch,boardz+2*screwcase-2*ch,thick]);
+                cube([sz-2*ch,
+                    pcb_thickness(PERF60x40)+pcbsp
+                        +2*screwcase-2*ch,thick]);
                 translate([0,0,lh+uh-3*ch])
                 chamferedcube([sz,3*ch,3*ch],chamfer=ch);
                 translate([0,sz-screwcase,lh+uh-3*ch])
                 chamferedcube([sz,screwcase,3*ch],chamfer=ch);
-                translate([0,2*screwcase+boardz-3*ch,lh+uh-3*ch])
+                translate([0,2*screwcase
+                    +pcb_thickness(PERF60x40)+pcbsp
+                    -3*ch,lh+uh-3*ch])
                 chamferedcube([sz,3*ch,3*ch],chamfer=ch);
                 translate([ch,ch,lh+uh-thick])
-                cube([sz-2*ch,boardz+2*screwcase-2*ch,thick]);
+                cube([sz-2*ch,
+                    pcb_thickness(PERF60x40)+pcbsp
+                        +2*screwcase-2*ch,thick]);
                 translate([0,0,lh-3*ch/2])
                 chamferedcube([sz,thick+ch,3*ch],chamfer=ch);
                 translate([0,sz-thick-ch,lh-3*ch/2])
@@ -106,15 +115,29 @@ module side() {
             translate([sz/2,sz+eps,lh])
             rotate([90,0,0])
             chamferedcylinder(screwcase+2*eps, r=5, chamfer=-ch+eps);
-            translate([(sz-2*connx)/3,sz-30/2+7/2-screwcase/2-conny/2,0])
+            translate([sz/3-d_flange_length(DCONN9)/6,
+                       sz-30/2+7/2-screwcase/2,0])
             connectorcut();
             translate([screwcase/2,screwcase/2,0])
                 screwcut(lh+uh-2.5, 5.4);
             translate([screwcase/2,sz-screwcase/2,0])
                 screwcut(lh+uh-2.5, 5.4);
-            translate([sz/2-boardx/2,screwcase,thick])
-                cube([boardx,boardz,uh+lh-2*thick]);
+            translate([sz/2-pcb_length(PERF60x40)/2
+                           -pcbsp/2,screwcase,thick])
+                cube([pcb_length(PERF60x40) + pcbsp,
+                      pcb_thickness(PERF60x40) + pcbsp,
+                      uh+lh-2*thick]);
         }
+    }
+    if($preview) {
+        translate([sz/3-d_flange_length(DCONN9)/6,
+                   sz-30/2+7/2-screwcase/2,
+                   d_front_height(DCONN9)])
+        mirror([0,0,1])
+        d_plug(DCONN9, idc=true);
+            translate([sz/2,screwcase+pcbsp/2,pcb_width(PERF60x40)/2+pcbsp/2+thick])
+        rotate([-90,0,0])
+                pcb(PERF60x40);
     }
 }
 
@@ -139,7 +162,8 @@ module box() {
             translate([sz,0,0]) mirror([1,0,0]) side();
         }
         if(uselogos)
-        translate([sz/2,screwcase+boardz/2,0])
+        translate([sz/2,screwcase
+            +pcb_thickness(PERF60x40)/2+pcbsp/2,0])
         rotate([0,180,0]) {
             translate([-10,0,0])
             logocut("Atari_logo_alt.png");
@@ -153,7 +177,8 @@ module box() {
             translate([sz/4,0,0])
             textcut("2", 6);
         }
-        translate([sz/2,screwcase+boardz,lh+uh]) {
+        translate([sz/2,screwcase
+            +pcb_thickness(PERF60x40)+pcbsp,lh+uh]) {
             translate([0,3,0])
             textcut("NOSE INSIDE OFFS. 1", 4);
             translate([0,-3,0])
