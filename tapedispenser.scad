@@ -1,14 +1,22 @@
+// wall thickness
+th = 1.2; // [0.1:0.1:10]
+// height of role (with extra space)
+h = 21; // [1:200]
+// inner diameter of role
+id = 25; // [1:200]
+// outer diameter of role
+od = 40; // [1:200]
+// height of knife
+knife = 10; // [0.2:0.2:30]
+// thickness of knife (with extra space)
+knifesp = 0.4; // [0:0.05:5]
+
+// minimum angle for a fragment
 $fa=1;
+// minimum size of a fragment
 $fs=0.2;
 
-th = 1.2;
-h = 21;
-id = 25;
-od = 40;
-knife = 10;
-knifesp = 0.4;
-
-spikeang=acos((od/2+th)/(od/2+th+knife));
+assert(od>id, "outer diameter should be larger than inner diameter");
 
 module wall(h, d, th=th, inner=false,
         anglestart=0, angleend=360,
@@ -57,6 +65,8 @@ module rings() {
             angleend=i+60);
     }
 }
+
+spikeang=acos((od/2+th)/(od/2+th+knife));
 
 module cleanbox() {
     translate([0,0,-h/2-th/2])
