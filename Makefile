@@ -55,6 +55,7 @@ OPENSCAD:=openscad
 	$(OPENSCAD) -D part=16 --export-format binstl -o $@ $<
 
 all: \
+	airfit.stl \
 	cardholder_notext.stl \
 	cardholder_part1.stl \
 	cardholder_part2.stl \
