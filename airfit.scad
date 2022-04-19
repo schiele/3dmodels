@@ -9,6 +9,8 @@ snap = 1.8;
 latch = 3;
 th = 2;
 
+$vpt = [-1,0,-18];
+
 eps = 1/128;
 // minimum angle for a fragment
 $fa=1;
@@ -41,79 +43,70 @@ module wall(h, d, th=th, inner=false,
         cylinder(h, d=th, center=true);
 }
 
-module lip(s, dv, dh) {
-    vr = dv/2+s.y^2/8/dv;
+module lip(w, dv, dh) {
+    vr = dv/2+w^2/8/dv;
     intersection() {
         union() {
             translate([0,0,latch])
                 intersection() {
                     rotate([0,90,0])
-                        linear_extrude(s.x)
+                        linear_extrude(th+dep)
                             translate([-vr, 0])
                                 difference() {
                                     circle(vr);
                                     circle(vr-snap);
                                 }
                     if(dh == 0)
-                        translate([0, -s.y/2, 0])
-                            cube([s.x, s.y, snap]);
+                        translate([0, -w/2, 0])
+                            cube([th+dep, w, snap]);
                     else {
-                        hr = dh/2+s.y^2/8/dh;
+                        hr = dh/2+w^2/8/dh;
                         linear_extrude(snap+dh)
                             translate([hr, 0])
                                 circle(hr);
                     }
                 }
-            linear_extrude(s.z)
+            linear_extrude(latch+snap-1+dv)
                 polygon([
-                    [s.x-th,-s.y/2],
-                    [-2*th,-s.y/2-s.x-th],
-                    [s.x,-s.y/2-s.x-th],
-                    [s.x,-s.y/2],
-                    [s.x,s.y/2],
-                    [s.x,s.y/2+s.x+th],
-                    [-2*th,s.y/2+s.x+th],
-                    [s.x-th,s.y/2],
+                    [dep,-w/2],
+                    [-2*th,-w/2-2*th-dep],
+                    [th+dep,-w/2-2*th-dep],
+                    [th+dep,-w/2],
+                    [th+dep,w/2],
+                    [th+dep,w/2+2*th+dep],
+                    [-2*th,w/2+2*th+dep],
+                    [dep,w/2],
                 ]);
-            translate([dh,0,0])
-                rotate([90,0,90])
-                    linear_extrude(s.x-dh)
+            for(i=[-1,1])
+                translate([dh,0,0]) rotate([90,0,90])
+                    linear_extrude(th+dep-dh)
                         polygon([
-                            [-s.y/2,s.z],
-                            [-s.y/2,latch+dv],
-                            [-s.y/2-latch-dv,0],
-                            [-s.y/2-latch-dv,s.z],
-                        ]);
-            translate([dh,0,0])
-                rotate([90,0,90])
-                    linear_extrude(s.x-dh)
-                        polygon([
-                            [s.y/2,s.z],
-                            [s.y/2,latch+dv],
-                            [s.y/2+latch+dv,0],
-                            [s.y/2+latch+dv,s.z],
+                            [i*w/2,latch+snap-1+dv],
+                            [i*w/2,latch+dv],
+                            [i*(w/2+latch+dv),0],
+                            [i*(w/2+latch+dv),latch+snap-1+dv],
                         ]);
         }
         translate([-2*th,0,0])
             rotate([90,0,90])
-                linear_extrude(s.x+2*th)
+                linear_extrude(3*th+dep)
                     polygon([
-                        [-s.y/2-s.x-th,s.z-s.x-th],
-                        [0,s.z+s.y/2],
-                        [s.y/2+s.x+th,s.z-s.x-th],
+                        [-w/2-2*th-dep,latch+snap-1+dv-2*th-dep],
+                        [0,latch+snap-1+dv+w/2],
+                        [w/2+2*th+dep,latch+snap-1+dv-2*th-dep],
                     ]);
     }
 }
 
 intersection() {
     translate([12,0,0])
-        lip([4,llw,latch+snap-1+lldv], lldv, lldh);
+        lip(llw, lldv, lldh);
     translate([-1,0,5])
         cube([34,20,10], center=true);
 }
 translate([-14,0,0])
     rotate([0,0,180])
-        lip([4,lsw,latch+snap-1+lsdv], lsdv, lsdh);
+        lip(lsw, lsdv, lsdh);
 translate([-1,0,-1])
     cube([34,20,2], center=true);
 translate([10,0,-15.5])
@@ -121,9 +114,7 @@ translate([10,0,-15.5])
 translate([15,0,-11])
     cube([2,20,22], center=true);
 
-translate([0,0,-11])
-    rotate([90,0,180])
-        wall(20, 18, anglestart=60, angleend=300);
-translate([0,0,-31])
-    rotate([90,0,180])
-        wall(20, 18, anglestart=60, angleend=300);
+for(i=[-11,-31])
+    translate([0,0,i])
+        rotate([90,0,180])
+            wall(20, 18, anglestart=60, angleend=300);
