@@ -9,13 +9,13 @@ translate([0,-50-ch,0.5])
     chamferedcube([20,10+ch,1], center=true, chamfer=ch);
 
 intersection() {
-    translate([0, 0, 0.5])
-    hexgrid([85,85,1], center=true, width=1, chamfer=ch, hexsize=6);
+    translate([0, 0, 0])
+    hexgrid([85,85,4], center=true, width=1.2, chamfer=ch, hexsize=10);
     union() {
-        linear_extrude(1)
+        linear_extrude(2)
             circle(d=85);
         translate([-85/2,0,0])
-            linear_extrude(1)
+            linear_extrude(2)
                 square([85, 85/2]);
     }
 }
@@ -30,6 +30,10 @@ difference() {
             chamferedcube([85, 85/2+ch, 5], chamfer=ch);
         translate([-85/2, 85/2-1, 4])
             chamferedcube([85, 6, 1], chamfer=ch);
+        translate([-15/2, -85/2, 0])
+        rotate([90,0,90])
+        linear_extrude(15)
+        polygon([[2,0],[2,5],[-1.5,5],[-2,4],[-1,2],[-1,0]]);
     };
     union() {
         translate([0,0,-eps])
