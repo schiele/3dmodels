@@ -8,8 +8,14 @@ dep = 2;
 snap = 1.8;
 latch = 3;
 th = 2;
+ntubes = 2;
+tube = 18;
+tubegap = 120;
+width = 20;
+holder = 20;
+holdergap = 3;
 
-$vpt = [-1,0,-18];
+$vpt = [-12,0,-18];
 
 eps = 1/128;
 // minimum angle for a fragment
@@ -17,38 +23,12 @@ $fa=1;
 // minimum size of a fragment
 $fs=0.2;
 
-module wall(h, d, th=th, inner=false,
-        anglestart=0, angleend=360,
-        start=true, end=true, gapstart=0, gapend=0) {
-    r = d/2 + (inner ? -1 : 1) * th/2;
-    gapunit = asin(th/2/r);
-    realgapstart = (gapstart + (start ? 1 : 0));
-    realgapend = (gapend + (start ? 1 : 0));
-    realanglestart = anglestart + realgapstart*gapunit;
-    realangleend = angleend - realgapend * gapunit;
-
-    if(start)
-        rotate([0,0,realanglestart])
-        translate([r,0,0])
-        cylinder(h, d=th, center=true);
-
-    rotate([0,0,realanglestart])
-    rotate_extrude(angle=realangleend-realanglestart)
-    translate([r,0,0])
-    square([th,h], center=true);
-
-    if(end)
-        rotate([0,0,realangleend])
-        translate([r,0,0])
-        cylinder(h, d=th, center=true);
-}
-
 module lip(w, dv, dh) {
-    vr = dv/2+w^2/8/dv;
     intersection() {
         union() {
             translate([0,0,latch])
                 intersection() {
+                    vr = dv/2+w^2/8/dv;
                     rotate([0,90,0])
                         linear_extrude(th+dep)
                             translate([-vr, 0])
@@ -88,33 +68,52 @@ module lip(w, dv, dh) {
                         ]);
         }
         translate([-2*th,0,0])
-            rotate([90,0,90])
-                linear_extrude(3*th+dep)
-                    polygon([
-                        [-w/2-2*th-dep,latch+snap-1+dv-2*th-dep],
-                        [0,latch+snap-1+dv+w/2],
-                        [w/2+2*th+dep,latch+snap-1+dv-2*th-dep],
-                    ]);
+        rotate([0,90,0])
+        cylinder(3*th+dep, r=latch+snap-1+dv+w/2, $fn=4);
     }
 }
 
 intersection() {
-    translate([12,0,0])
-        lip(llw, lldv, lldh);
-    translate([-1,0,5])
-        cube([34,20,10], center=true);
+    union() {
+        translate([1,0,0])
+            lip(llw, lldv, lldh);
+        translate([-25,0,0]) rotate([0,0,180])
+            lip(lsw, lsdv, lsdh);
+    }
+    translate([-12,0,5])
+        cube([34,width,10], center=true);
 }
-translate([-14,0,0])
-    rotate([0,0,180])
-        lip(lsw, lsdv, lsdh);
-translate([-1,0,-1])
-    cube([34,20,2], center=true);
-translate([10,0,-15.5])
-    cube([2,20,31], center=true);
-translate([15,0,-11])
-    cube([2,20,22], center=true);
 
-for(i=[-11,-31])
-    translate([0,0,i])
-        rotate([90,0,180])
-            wall(20, 18, anglestart=60, angleend=300);
+rotate([90,0,0])
+linear_extrude(width, center=true) {
+    polygon([
+        [holdergap+th-34,0],
+        [holdergap+th-34,-th],
+        [-th,-th],
+        [-th,-(ntubes-1/2)*(tube+th)-th/2],
+        [0,-(ntubes-1/2)*(tube+th)-th/2],
+        [0,-th],
+        [holdergap,-th],
+        [holdergap,-th-holder],
+        [holdergap+th,-th-holder],
+        [holdergap+th,0],
+    ]);
+    for(i=[1:ntubes])
+        translate([-tube/2-th,(1/2-i)*(tube+th)-th/2]) {
+            for(i=[-120,120])
+                rotate([0,0,i])
+                translate([tube/2 + th/2,0])
+                circle(d=th);
+            difference() {
+                circle(d=tube+2*th);
+                circle(d=tube);
+                translate([-tube/2-2*th,0])
+                    circle(d=tube+4*th, $fn=6);
+            }
+        }
+}
+
+%for(i=[1:ntubes])
+    translate([-tube/2-th,0,(1/2-i)*(tube+th)-th/2])
+    rotate([90,0,0])
+    cylinder(2*width, d=tube, center=true);
