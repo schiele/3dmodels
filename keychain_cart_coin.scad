@@ -9,56 +9,71 @@
 // Code based on the model from
 // https://www.prusaprinters.org/prints/19338
 
-part = 1;
+// part to render
+part = 0; // [0:2]
+// first name
 line1 = "Robert";
+// family name
 line2 = "Schiele";
+// country and area code
 line3 = "+49 173";
+// phone number
 line4 = "1234567";
-handle_length = 35.00;
-handle_width  = 18.00;
-hole_distance =  3.00;
-hole_dia      =  handle_width - hole_distance*2;
+// length of handle
+handle_length = 35.00; // [20:0.5:50]
+// width of handle
+handle_width  = 18.00; // [5:0.5:25]
+// distance of hole to outside
+hole_distance =  3.00; // [1:0.2:12]
+hole_dia      = handle_width - hole_distance*2;
+hole_center   = -handle_length+handle_width/2;
+// diameter of coin
 coin_dia      = 23.25;
+// height of coin
 obj_height    =  2.33;
-$fn=90;
+eps = 1/128;
+// minimum angle for a fragment
+$fa=1;
+// minimum size of a fragment
+$fs=0.2;
 
 module base() {
-    linear_extrude(height = obj_height)
-        union() {
-            translate([-(handle_length-(handle_width/2)), 0, 0])
-                difference() {
-                    union() {
-                        circle(d = handle_width);
-                        translate([0, -handle_width/2, 0])
-                            square([handle_length-(handle_width/2),
-                                    handle_width]);
-                    }
-                    translate([(-(handle_width-hole_dia)/2)+hole_distance, 0, 0])
-                        circle(d = hole_dia);
-                }
-            circle(d=coin_dia);
+    linear_extrude(height=obj_height,
+                   center=true) {
+        difference() {
+            hull() {
+                circle(d=handle_width);
+                translate([hole_center, 0])
+                    circle(d=handle_width);
+            }
+            translate([hole_center, 0])
+                circle(d=hole_dia);
         }
+        circle(d=coin_dia);
+    }
 };
 
 module engravetext(line) {
-            linear_extrude(height = obj_height/2)
-                text(line, font = "Liberation Sans:style=Bold",
-                     size=5, halign="center", valign="center");
+    linear_extrude(height = obj_height/2)
+        text(line,
+             font = "Liberation Sans:style=Bold",
+             size=5,
+             halign="center", valign="center");
 };
 
-module engraving() {
-    translate([-5, -4, obj_height/2]) rotate([180,0,0]) engravetext(line1);
-    translate([-5,  4, obj_height/2]) rotate([180,0,0]) engravetext(line2);
-    translate([-5,  4, obj_height/2]) rotate([0,0,0]) engravetext(line3);
-    translate([-5, -4, obj_height/2]) rotate([0,0,0]) engravetext(line4);
+module engraving(eps=0) {
+    translate([-5,  4, eps]) engravetext(line1);
+    translate([-5, -4, eps]) engravetext(line2);
+    rotate([180,0,0]) {
+        translate([-5,  4, eps]) engravetext(line3);
+        translate([-5, -4, eps]) engravetext(line4);
+    }
 }
 
-if (part == 1) {
-    difference() {
+if (part == 0 || part == 1)
+    color("black") difference() {
         base();
-        engraving();
+        engraving(eps);
     };
-} else if (part == 2) {
-    engraving();
-    engraving();
-};
+if (part == 0 || part == 2)
+    color("yellow") engraving();
