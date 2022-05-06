@@ -14,8 +14,10 @@ tubegap = 120;
 width = 20;
 holder = 20;
 holdergap = 3;
+textile = true;
+twidth = 13;
 
-$vpt = [-12,0,-18];
+$vpt = [-12,0,-18-(textile?30:0)];
 
 eps = 1/128;
 // minimum angle for a fragment
@@ -90,8 +92,8 @@ linear_extrude(width, center=true) {
         [holdergap+th-34,0],
         [holdergap+th-34,-th],
         [-th,-th],
-        [-th,-(ntubes-1/2)*(tube+th)-th/2],
-        [0,-(ntubes-1/2)*(tube+th)-th/2],
+        [-th,-(ntubes-1/2)*(tube+th)-th/2-(0&&textile?30.5:0)],
+        [0,-(ntubes-1/2)*(tube+th)-th/2-(0&&textile?30.5:0)],
         [0,-th],
         [holdergap,-th],
         [holdergap,-th-holder],
@@ -117,3 +119,40 @@ linear_extrude(width, center=true) {
     translate([-tube/2-th,0,(1/2-i)*(tube+th)-th/2])
     rotate([90,0,0])
     cylinder(2*width, d=tube, center=true);
+
+if(textile)
+translate([-th,width/2,-10-ntubes*(tube+th)])
+rotate([90,0,-90]) {
+    translate([0,0,2])
+linear_extrude(1.5)
+    hull() {
+        translate([twidth-1,-2]) circle(1);
+        translate([1,-2]) circle(1);
+        translate([twidth/2,-17]) circle(twidth/2);
+        translate([1,-50]) circle(1);
+        intersection() {
+            translate([twidth/2,
+                       -2-sqrt((twidth-1)^2-(twidth/2-1)^2)])
+                circle(twidth);
+            translate([twidth/2,0])
+            square([twidth-2,5], center=true);
+        }
+    }
+    linear_extrude(2) hull() {
+translate([twidth/2,-5.5])
+    circle(1.5);
+translate([twidth/2,-8])
+    circle(1.5);
+    }
+    translate([0,0,-th])
+    linear_extrude(th) hull() {
+translate([1,19])
+    circle(1);
+translate([width-1,19])
+    circle(1);
+translate([1,-10.5])
+    circle(1);
+translate([twidth-1,-10.5])
+    circle(1);
+    }
+}
