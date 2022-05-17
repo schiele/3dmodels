@@ -64,6 +64,7 @@ all: \
 	keychain_cart_coin_part1.stl \
 	keychain_cart_coin_part2.stl \
 	popcorncover.stl \
+	silicaholder.stl \
 	tapedispenser.stl \
 
 .PHONY: clean
