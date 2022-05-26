@@ -63,6 +63,10 @@ all: \
 	keychain_cart_coin_notext.stl \
 	keychain_cart_coin_part1.stl \
 	keychain_cart_coin_part2.stl \
+	phonestand_part1.stl \
+	phonestand_part2.stl \
+	phonestand_part3.stl \
+	phonestand_part4.stl \
 	popcorncover.stl \
 	silicaholder.stl \
 	tapedispenser.stl \

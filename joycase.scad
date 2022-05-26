@@ -151,9 +151,6 @@ module side() {
                    d_front_height(DCONN9)])
         mirror([0,0,1])
         d_plug(DCONN9, idc=true);
-            translate([sz/2,screwcase+pcbsp/2,pcb_width(PERF60x40)/2+pcbsp/2+thick])
-        rotate([-90,0,0])
-                pcb(PERF60x40);
     }
 }
 
@@ -251,3 +248,20 @@ translate([sz-3/2*ch,sz/2,lh])
 rotate([90,0,0])
 cylinder(sz-2*screwcase-0.4,r=0.6, center=true);
 }
+
+myboard = ["JOYADAPTER", "joystick adapter", 60, 40, 1.6, 0, 2.3, 0, "green", true, [[2,2],[-2,2],[2,-2],[-2,-2]], [
+    [ 5.87+2.54*3, 3.49+2.54*7,     0, "2p54header", 1, 9],
+    [ 5.87+2.54*6.5, 3.49+2.54*7.5,   0, "pdip", 20, "SN74LVC245AN", true],
+    [ 5.87+2.54*9.5, 3.49+2.54*7,     0, "2p54header", 2, 11],
+    [ 5.87+2.54*12.5, 3.49+2.54*6.5, 180, "pdip", 20, "SN74LVC245AN", true],
+    [ 5.87+2.54*16, 3.49+2.54*7,     0, "2p54header", 1, 9],
+    ], [], [5.87, 3.49]];
+
+
+
+    if($preview) {
+            translate([sz/2,screwcase+pcbsp/2,pcb_width(PERF60x40)/2+pcbsp/2+thick])
+        rotate([-90,180,0])
+                pcb(myboard);
+    }
+//pcb(myboard);
