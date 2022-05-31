@@ -54,11 +54,19 @@ OPENSCAD:=openscad
 %_part16.stl: %.scad
 	$(OPENSCAD) -D part=16 --export-format binstl -o $@ $<
 
+coins_aed.stl: coins.scad
+	$(OPENSCAD) -D currency='"AED"' --export-format binstl -o $@ $<
+
+coins_eur.stl: coins.scad
+	$(OPENSCAD) -D currency='"EUR"' --export-format binstl -o $@ $<
+
 all: \
 	airfit.stl \
 	cardholder_notext.stl \
 	cardholder_part1.stl \
 	cardholder_part2.stl \
+	coins_aed.stl \
+	coins_eur.stl \
 	joycase.stl \
 	keychain_cart_coin_notext.stl \
 	keychain_cart_coin_part1.stl \
