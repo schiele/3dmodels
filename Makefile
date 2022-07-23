@@ -74,6 +74,7 @@ all: \
 	popcorncover.stl \
 	silicaholder.stl \
 	tapedispenser.stl \
+	wallet.stl \
 
 .PHONY: clean
 
