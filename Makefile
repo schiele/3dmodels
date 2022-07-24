@@ -67,6 +67,7 @@ all: \
 	cardholder_part2.stl \
 	coins_aed.stl \
 	coins_eur.stl \
+	hoseclip.stl \
 	joycase.stl \
 	keychain_cart_coin_notext.stl \
 	keychain_cart_coin_part1.stl \
