@@ -64,6 +64,7 @@ all: \
 	airfit.stl \
 	backscratcher.stl \
 	baggagewheel.stl \
+	cableclip.stl \
 	cardholder_notext.stl \
 	cardholder_part1.stl \
 	cardholder_part2.stl \
