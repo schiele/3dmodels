@@ -1,5 +1,26 @@
 OPENSCAD:=openscad
 
+all: \
+	airfit.stl \
+	backscratcher.stl \
+	baggagewheel.stl \
+	cableclip.stl \
+	cardholder_notext.stl \
+	cardholder_part1.stl \
+	cardholder_part2.stl \
+	cardholder2.stl \
+	coins_aed.stl \
+	coins_eur.stl \
+	hoseclip.stl \
+	joycase.stl \
+	keychain_cart_coin_notext.stl \
+	keychain_cart_coin_part1.stl \
+	keychain_cart_coin_part2.stl \
+	popcorncover.stl \
+	silicaholder.stl \
+	tapedispenser.stl \
+	wallet.stl \
+
 %.stl: %.scad
 	$(OPENSCAD) --export-format binstl -o $@ $<
 
@@ -59,27 +80,6 @@ coins_aed.stl: coins.scad
 
 coins_eur.stl: coins.scad
 	$(OPENSCAD) -D currency='"EUR"' --export-format binstl -o $@ $<
-
-all: \
-	airfit.stl \
-	backscratcher.stl \
-	baggagewheel.stl \
-	cableclip.stl \
-	cardholder_notext.stl \
-	cardholder_part1.stl \
-	cardholder_part2.stl \
-	cardholder2.stl \
-	coins_aed.stl \
-	coins_eur.stl \
-	hoseclip.stl \
-	joycase.stl \
-	keychain_cart_coin_notext.stl \
-	keychain_cart_coin_part1.stl \
-	keychain_cart_coin_part2.stl \
-	popcorncover.stl \
-	silicaholder.stl \
-	tapedispenser.stl \
-	wallet.stl \
 
 .PHONY: clean
 
