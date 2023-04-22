@@ -65,6 +65,7 @@ all: \
 	cardholder_notext.stl \
 	cardholder_part1.stl \
 	cardholder_part2.stl \
+	cardholder2.stl \
 	coins_aed.stl \
 	coins_eur.stl \
 	hoseclip.stl \
