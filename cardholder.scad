@@ -42,7 +42,7 @@ card_width = 53.98;
 card_thickness = 0.76;
 card_radius = 3.18;
 space = 0.2;
-thickness = 1;
+thickness = 1; // [0.2:0.1:3]
 chamfer = 0.5;
 clipoffset = 6.57;
 clipsize = 10;
@@ -124,29 +124,29 @@ module base() {
                 mirrory() translate([card_width/2 - card_radius,
                            card_length - 2*card_radius, 0])
                     rotate([90,0,0])
-                        linear_extrude(height = card_length - 2*card_radius)
+                        linear_extrude(height = card_length - 2*card_radius, convexity=10)
                             polygon(clamp);
                 translate([-card_width/2 + card_radius, card_length - 2*card_radius, 0])
                     rotate([90,0,90])
-                        linear_extrude(height = card_width - 2*card_radius)
+                        linear_extrude(height = card_width - 2*card_radius, convexity=10)
                             polygon(clamp);
                 translate([card_width/2 - card_radius, 0, 0])
                     rotate([90,0,270])
-                        linear_extrude(height = card_width - 2*card_radius)
+                        linear_extrude(height = card_width - 2*card_radius, convexity=10)
                             polygon(clamp);
                 mirrory() translate([card_width/2 - card_radius,
                            card_length - 2*card_radius, 0])
                     rotate([0,0,0])
-                        rotate_extrude(angle = 90)
+                        rotate_extrude(angle = 90, convexity=10)
                             polygon(clamp);
                 mirrory() translate([card_width/2 - card_radius, 0, 0])
                     rotate([0,0,270])
-                        rotate_extrude(angle = 90)
+                        rotate_extrude(angle = 90, convexity=10)
                             polygon(clamp);
                 mirrory() translate([card_width/2 - card_radius, 0, 0])
                     difference() {
                         rotate([90,0,0])
-                            linear_extrude(height = 4*thickness)
+                            linear_extrude(height = 4*thickness, convexity=10)
                                 polygon(front);
                         translate([0,0,-eps])
                         cylinder(h=thickness + (cards-1)*card_thickness + 2*eps,
@@ -154,15 +154,15 @@ module base() {
                     };
                 mirrory() translate([card_width/2 - card_radius, -4*thickness, 0])
                     rotate([0,0,270])
-                        rotate_extrude(angle = 90)
+                        rotate_extrude(angle = 90, convexity=10)
                             polygon(front);
                 translate([card_width/2 - card_radius, -4*thickness, 0])
                     rotate([90,0,270])
-                        linear_extrude(height = card_width - 2*card_radius)
+                        linear_extrude(height = card_width - 2*card_radius, convexity=10)
                             polygon(front);
             };
             mirrory() rotate([90,0,0])
-                linear_extrude(height = eps+card_radius + space + thickness)
+                linear_extrude(height = eps+card_radius + space + thickness, convexity=10)
                     polygon(loadcut);
             translate([
                 -thickness - space - card_width/2,
@@ -188,10 +188,10 @@ module base() {
             if (!hole)
                 translate([connectorsize/2, 0 - card_radius - space, 0])
                     rotate([90,0,270])
-                        linear_extrude(height = connectorsize)
+                        linear_extrude(height = connectorsize, convexity=10)
                             polygon(connectorcut);
             translate([0, card_length - card_radius - card_width/2, -eps]) {
-                linear_extrude(thickness+2*eps)
+                linear_extrude(thickness+2*eps, convexity=10)
                 hull() {
                     translate([0, -22])
                         circle(10);
@@ -202,7 +202,7 @@ module base() {
         mirrory() translate([card_width/2 - card_radius - clipoffset + clipsize/2,
                    0 - card_radius - space, 0])
             rotate([90,0,270])
-                linear_extrude(height = clipsize)
+                linear_extrude(height = clipsize, convexity=10)
                     polygon(clip);
     };
 };
@@ -212,7 +212,7 @@ module engravetext(loc, line, sz, st, ft, eps=0) {
                thickness/2])
     scale([st,1,1])
         rotate([180,0,90])
-            linear_extrude(height = thickness/2+eps)
+            linear_extrude(height = thickness/2+eps, convexity=10)
                 text(line, font = ft,
                      size=sz, halign="center", valign="center");
 };
