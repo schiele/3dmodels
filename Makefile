@@ -1,4 +1,4 @@
-OPENSCAD:=openscad
+OPENSCAD:=openscad --hardwarnings
 
 all: \
 	airfit.stl \

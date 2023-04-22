@@ -17,7 +17,7 @@ holdergap = 3;
 textile = true;
 twidth = 13;
 
-$vpt = [-12,0,-18-(textile?30:0)];
+//$vpt = [-12,0,-18-(textile?30:0)];
 
 eps = 1/128;
 // minimum angle for a fragment
