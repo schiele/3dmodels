@@ -62,6 +62,7 @@ coins_eur.stl: coins.scad
 
 all: \
 	airfit.stl \
+	backscratcher.stl \
 	cardholder_notext.stl \
 	cardholder_part1.stl \
 	cardholder_part2.stl \
