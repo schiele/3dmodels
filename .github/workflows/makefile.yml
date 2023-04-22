@@ -1,0 +1,17 @@
+name: Build Models
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install OpenSCAD
+      run: sudo apt-get install -y openscad
+    - uses: actions/checkout@v3
+    - name: build
+      run: make
