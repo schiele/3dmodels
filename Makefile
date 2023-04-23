@@ -18,6 +18,10 @@ all: \
 	keychain_cart_coin_part2.stl \
 	popcorncover.stl \
 	powerdisk.stl \
+	rewind_stand_single.stl \
+	rewind_stand_left.stl \
+	rewind_stand_middle.stl \
+	rewind_stand_right.stl \
 	silicaholder.stl \
 	tapedispenser.stl \
 	wallet.stl \
@@ -81,6 +85,9 @@ coins_aed.stl: coins.scad
 
 coins_eur.stl: coins.scad
 	$(OPENSCAD) -D currency='"EUR"' --export-format binstl -o $@ $<
+
+rewind_stand_%.stl: rewind_stand.scad
+	$(OPENSCAD) -D print='"$*"' --export-format binstl -o $@ $<
 
 .PHONY: clean
 
