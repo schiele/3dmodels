@@ -11,6 +11,7 @@ all: \
 	cardholder2.stl \
 	coins_aed.stl \
 	coins_eur.stl \
+	geberit.stl \
 	hoseclip.stl \
 	joycase.stl \
 	keychain_cart_coin_notext.stl \
