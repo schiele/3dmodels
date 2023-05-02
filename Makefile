@@ -26,6 +26,7 @@ all: \
 	rewind_stand_right.stl \
 	silicaholder.stl \
 	tapedispenser.stl \
+	trashbagholder.stl \
 	wallet.stl \
 
 %.stl: %.scad
