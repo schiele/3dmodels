@@ -1,0 +1,6 @@
+#!/bin/bash
+for f in cache/*.stl; do
+	if sha1sum -c $f.sha1sum; then
+		cp $f .
+	fi
+done
