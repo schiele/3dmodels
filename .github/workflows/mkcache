@@ -1,0 +1,15 @@
+#!/bin/bash
+mkdir -p cache
+for f in *.dep; do
+	if test "$f" != '*.dep'; then
+		cp ${f//.dep} cache/
+		sha1sum $(
+			cat $f |
+			tr '\n' '\r' |
+			sed -e 's/\\\r//g' |
+			tr '\r' '\n' |
+			sed -e 's/.*://' |
+			sed -e "s|$PWD/||g") > cache/${f//dep/sha1sum}
+	fi
+done
+
