@@ -26,6 +26,6 @@ jobs:
     - name: read cache
       run: .github/workflows/getcache
     - name: build
-      run: make
+      run: make -j $(nproc)
     - name: create cache
       run: .github/workflows/mkcache
