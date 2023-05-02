@@ -17,6 +17,7 @@ all: \
 	keychain_cart_coin_notext.stl \
 	keychain_cart_coin_part1.stl \
 	keychain_cart_coin_part2.stl \
+	mixer_opener.stl \
 	phoneclamp.stl \
 	popcorncover.stl \
 	powerdisk.stl \
