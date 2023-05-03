@@ -26,6 +26,7 @@ all: \
 	rewind_stand_middle.stl \
 	rewind_stand_right.stl \
 	silicaholder.stl \
+	sodastreamstand.stl \
 	tapedispenser.stl \
 	trashbagholder.stl \
 	wallet.stl \
