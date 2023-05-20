@@ -2,6 +2,7 @@ OPENSCAD=openscad --hardwarnings --export-format binstl -d $@.dep -o $@ $<
 
 all: \
 	airfit.stl \
+	aquaflask.stl \
 	backscratcher.stl \
 	baggagewheel.stl \
 	cableclip.stl \
