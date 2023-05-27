@@ -14,6 +14,9 @@ all: \
 	coins_eur.stl \
 	geberit.stl \
 	hoseclip.stl \
+	jewelry_stand.stl \
+	jewelry_backplane.stl \
+	jewelry_clip.stl \
 	joycase.stl \
 	keychain_cart_coin_notext.stl \
 	keychain_cart_coin_part1.stl \
@@ -91,6 +94,9 @@ coins_aed.stl: coins.scad
 
 coins_eur.stl: coins.scad
 	$(OPENSCAD) -D currency='"EUR"'
+
+jewelry_%.stl: jewelry.scad
+	$(OPENSCAD) -D part='"$*"'
 
 rewind_stand_%.stl: rewind_stand.scad
 	$(OPENSCAD) -D print='"$*"'
