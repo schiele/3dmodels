@@ -12,6 +12,7 @@ all: \
 	cardholder2.stl \
 	coins_aed.stl \
 	coins_eur.stl \
+	dosing.stl \
 	geberit.stl \
 	hoseclip.stl \
 	jewelry_stand.stl \
