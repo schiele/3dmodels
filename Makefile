@@ -5,6 +5,7 @@ all: \
 	aquaflask.stl \
 	backscratcher.stl \
 	baggagewheel.stl \
+	bedclamp2.stl \
 	cableclip.stl \
 	cardholder_notext.stl \
 	cardholder_part1.stl \
