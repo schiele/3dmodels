@@ -1,5 +1,5 @@
 // auto-rewind spool holder for dry-box
-// Copyright (C) 2023  Robert Schiele <rschiele@gmail.com>
+// Copyright (C) 2023-2024  Robert Schiele <rschiele@gmail.com>
 //
 // This work is licensed under the Creative Commons Attribution 4.0
 // International License. To view a copy of this license, visit 
@@ -19,6 +19,7 @@ cyldia = 40;
 cylspan = 205;
 axledia = 7.35;
 axlecut = 2.35;
+separateaxle = false;
 wall = 5;
 tol = 0.1;
 print = "single"; // ["no", "single", "left", "middle", "right"]
@@ -173,20 +174,21 @@ module element(back, male, conmale, print=true) {
                                     circle(d=cyldia+4*wall);
                             }
             }
+        }
+        if(male && !separateaxle) {
             linear_extrude(93, center=true)
                 axleprofile();
         }
     }
-    if(male) {
-        if(!conmale) concut();
-    } else {
-        translate([cylspan/2, 0, 0]) {
+    if(male && !conmale) concut();
+    translate([cylspan/2, 0, 0]) {
+        if(!male)
             linear_extrude(90, center=true,
                            convexity=2)
                 offset(r=wall/2+tol) prof();
+        if(separateaxle || !male)
             linear_extrude(93, center=true)
                 offset(r=tol) axleprofile();
-        }
     }
     if(!back) {
         mirror([0, 0, 1]) concut();
@@ -198,6 +200,11 @@ module element(back, male, conmale, print=true) {
     }
     if(!back && print) translate([0, 0, -95/2])
         cylinder(9, d=wall);
+    if(male && separateaxle) for(i=[-15, -30])
+        translate([0, i, axlecut-(back?100/2:95/2)])
+            rotate([90, 0, 90])
+                linear_extrude(93, center=true)
+                    axleprofile();
     if(conmale) con(male);
 }
 
