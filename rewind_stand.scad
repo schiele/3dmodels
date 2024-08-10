@@ -175,7 +175,7 @@ module element(back, male, conmale, print=true) {
                             }
             }
         }
-        if(male && !separateaxle) {
+        if(male && !(separateaxle && print)) {
             linear_extrude(93, center=true)
                 axleprofile();
         }
@@ -186,7 +186,7 @@ module element(back, male, conmale, print=true) {
             linear_extrude(90, center=true,
                            convexity=2)
                 offset(r=wall/2+tol) prof();
-        if(separateaxle || !male)
+        if(separateaxle && print || !male)
             linear_extrude(93, center=true)
                 offset(r=tol) axleprofile();
     }
@@ -200,7 +200,7 @@ module element(back, male, conmale, print=true) {
     }
     if(!back && print) translate([0, 0, -95/2])
         cylinder(9, d=wall);
-    if(male && separateaxle) for(i=[-15, -30])
+    if(male && separateaxle && print) for(i=[-15, -30])
         translate([0, i, axlecut-(back?100/2:95/2)])
             rotate([90, 0, 90])
                 linear_extrude(93, center=true)
